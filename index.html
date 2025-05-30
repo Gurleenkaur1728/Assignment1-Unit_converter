@@ -1,3 +1,19 @@
+<!-- 
+  Project Title: Unit Converter Web App
+  Course: CPRG-306-D (Web Development 2) - Spring 2025
+  Group Number: 2
+  Group Members:
+    - Gurleen
+    - Gurleen Kaur
+    - Gurleen Kaur Mangat
+  Date: 30-may -2025
+  Description:
+    This project is a responsive web-based unit converter that allows users to convert 
+    between different units of Weight (lb/kg), Distance (mi/km), and Temperature (C/F).
+    The user can enter either a single value or a comma-separated list of values.
+    The app uses Tailwind CSS for styling and a higher-order JavaScript function to 
+    handle all conversions.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,6 +83,7 @@
 
   
   <script>
+  // Returns a conversion function based on the given units 
     function getConverter(from, to) {
       const conversions = {
         'lb->kg': v => v / 2.2046,
@@ -78,25 +95,26 @@
       };
       return conversions[`${from}->${to}`];
     }
-
+      // Main function to read input, convert it, and display result
     function convertUnit(from, to, inputId, outputId) {
       const inputEl = document.getElementById(inputId);
       const outputEl = document.getElementById(outputId);
       const input = inputEl.value.trim();
       const converter = getConverter(from, to);
-
+      // Validate the converter function
       if (!converter) {
         outputEl.textContent = 'Invalid conversion type.';
         return;
       }
 
-      const values = input.includes(',') ? input.split(',').map(Number) : [Number(input)];
 
+      const values = input.includes(',') ? input.split(',').map(Number) : [Number(input)];
+    // Check for invalid input
       if (values.some(isNaN)) {
         outputEl.textContent = 'Invalid input. Please enter numbers only.';
         return;
       }
-
+ // Apply the conversion and display results
       const results = values.map(v => converter(v).toFixed(2));
       outputEl.textContent = `Converted: ${results.join(', ')}`;
     }
