@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unit Converter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-100 font-sans min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-blue-600 text-white p-4 sticky top-0 z-50 shadow-md">
+    <ul class="flex justify-around font-semibold tracking-wide">
+      <li><a href="#weight" class="hover:underline">Weight</a></li>
+      <li><a href="#distance" class="hover:underline">Distance</a></li>
+      <li><a href="#temperature" class="hover:underline">Temperature</a></li>
+    </ul>
+  </nav>
+
+  <main class="max-w-3xl mx-auto mt-8 space-y-12">
+
+    <!-- Weight -->
+    <section id="weight" class="min-h-screen">
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h2 class="text-2xl font-bold mb-4 text-blue-700">Weight Converter</h2>
+        <input id="weightInput" class="border p-2 mb-4 w-full rounded" placeholder="Enter pounds or kg (e.g. 100 or 100,200)" />
+        <div class="flex gap-4 mb-2">
+          <button onclick="convertUnit('lb', 'kg', 'weightInput', 'weightOutput')" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Lb to Kg</button>
+          <button onclick="convertUnit('kg', 'lb', 'weightInput', 'weightOutput')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Kg to Lb</button>
+        </div>
+        <div id="weightOutput" class="font-semibold text-gray-800 mt-2"></div>
+      </div>
+    </section>
+
+    <!-- Distance -->
+    <section id="distance" class="min-h-screen">
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h2 class="text-2xl font-bold mb-4 text-blue-700">Distance Converter</h2>
+        <input id="distanceInput" class="border p-2 mb-4 w-full rounded" placeholder="Enter miles or km (e.g. 10 or 10,20)" />
+        <div class="flex gap-4 mb-2">
+          <button onclick="convertUnit('mi', 'km', 'distanceInput', 'distanceOutput')" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Miles to KM</button>
+          <button onclick="convertUnit('km', 'mi', 'distanceInput', 'distanceOutput')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">KM to Miles</button>
+        </div>
+        <div id="distanceOutput" class="font-semibold text-gray-800 mt-2"></div>
+      </div>
+    </section>
+
+    <!--- Temperature --->
+    <section id="temperature" class="min-h-screen">
+      <div class="bg-white rounded-xl shadow-md p-6">
+        <h2 class="text-2xl font-bold mb-4 text-blue-700">Temperature Converter</h2>
+        <input id="tempInput" class="border p-2 mb-4 w-full rounded" placeholder="Enter C or F (e.g. 25 or 25,30)" />
+        <div class="flex gap-4 mb-2">
+          <button onclick="convertUnit('C', 'F', 'tempInput', 'tempOutput')" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">C to F</button>
+          <button onclick="convertUnit('F', 'C', 'tempInput', 'tempOutput')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">F to C</button>
+        </div>
+        <div id="tempOutput" class="font-semibold text-gray-800 mt-2"></div>
+      </div>
+    </section>
+
+  </main>
+
+  
+  <script>
+    function getConverter(from, to) {
+      const conversions = {
+        'lb->kg': v => v / 2.2046,
+        'kg->lb': v => v * 2.2046,
+        'mi->km': v => v * 1.60934,
+        'km->mi': v => v / 1.60934,
+        'C->F': v => (v * 9/5) + 32,
+        'F->C': v => (v - 32) * 5/9,
+      };
+      return conversions[`${from}->${to}`];
+    }
+
+    function convertUnit(from, to, inputId, outputId) {
+      const inputEl = document.getElementById(inputId);
+      const outputEl = document.getElementById(outputId);
+      const input = inputEl.value.trim();
+      const converter = getConverter(from, to);
+
+      if (!converter) {
+        outputEl.textContent = 'Invalid conversion type.';
+        return;
+      }
+
+      const values = input.includes(',') ? input.split(',').map(Number) : [Number(input)];
+
+      if (values.some(isNaN)) {
+        outputEl.textContent = 'Invalid input. Please enter numbers only.';
+        return;
+      }
+
+      const results = values.map(v => converter(v).toFixed(2));
+      outputEl.textContent = `Converted: ${results.join(', ')}`;
+    }
+  </script>
+
+</body>
+</html>
